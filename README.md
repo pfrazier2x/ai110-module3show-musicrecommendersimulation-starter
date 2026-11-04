@@ -2,32 +2,71 @@
 
 ## Project Summary
 
-In this project you will build and explain a small music recommender system.
+This project is a Python-based music recommendation system that helps users discover songs based on their music preferences. The system uses content-based filtering to compare a user's favorite genre, mood, and energy level with songs in a dataset.
 
-Your goal is to:
-
-- Represent songs and a user "taste profile" as data
-- Design a scoring rule that turns that data into recommendations
-- Evaluate what your system gets right and wrong
-- Reflect on how this mirrors real world AI recommenders
-
-Replace this paragraph with your own summary of what your version does.
-
----
+Each song receives a score based on how closely it matches the user's preferences. The songs with the highest scores are recommended first. The goal of this project is to understand how platforms like Spotify use data and algorithms to make personalized music recommendations.
 
 ## How The System Works
 
-Explain your design in plain language.
+My music recommender uses content-based filtering. Instead of looking at what other people listen to, the system focuses on the characteristics of each song and compares them to the user's preferences.
 
-Some prompts to answer:
+### Song Features
 
-- What features does each `Song` use in your system
-  - For example: genre, mood, energy, tempo
-- What information does your `UserProfile` store
-- How does your `Recommender` compute a score for each song
-- How do you choose which songs to recommend
+Each song in the dataset includes information such as:
 
-You can include a simple diagram or bullet list if helpful.
+- **Title:** The name of the song.
+- **Artist:** The person or group performing the song.
+- **Genre:** The type of music, such as pop, hip-hop, rock, or R&B.
+- **Mood:** The feeling of the song, such as happy, chill, or sad.
+- **Energy:** A number between 0.0 and 1.0 that represents how energetic a song is.
+- **Tempo:** The speed of the song measured in beats per minute (BPM).
+
+### User Profile
+
+The user profile stores the listener's music preferences:
+
+- Favorite genre
+- Favorite mood
+- Target energy level
+
+For example, a user might prefer hip-hop music with a chill mood and an energy level of 0.6.
+
+### Scoring Algorithm
+
+The recommender calculates a score for each song using a weighted scoring system.
+
+- Genre match: +2.0 points
+- Mood match: +1.0 point
+- Energy similarity: Up to +1.0 point
+
+Energy similarity is calculated using:
+
+`1.0 - abs(song_energy - target_energy)`
+
+This formula rewards songs with energy levels closer to the user's preference.
+
+For example, if a user prefers hip-hop, chill music, and an energy level of 0.6, a song matching both genre and mood with an energy level of 0.7 would receive:
+
+- Genre: 2.0
+- Mood: 1.0
+- Energy: 0.9
+- Total Score: 3.9
+
+### Recommendation Process
+
+1. Load song information from `data/songs.csv`.
+2. Read the user's music preferences.
+3. Compare each song against the user's profile.
+4. Calculate a score for each song.
+5. Sort the songs from highest to lowest score.
+6. Recommend the top 5 songs.
+7. Display each recommendation with its score and the reasons it was selected.
+
+### Data Flow
+
+User Preferences → Song Dataset → Scoring Algorithm → Song Ranking → Top 5 Recommendations
+
+This approach is simple and easy to understand, but it can sometimes recommend too many songs from the same genre.
 
 ---
 
@@ -35,20 +74,40 @@ You can include a simple diagram or bullet list if helpful.
 
 ### Setup
 
-1. Create a virtual environment (optional but recommended):
+1. Clone the repository:
 
-   ```bash
-   python -m venv .venv
-   source .venv/bin/activate      # Mac or Linux
-   .venv\Scripts\activate         # Windows
+```bash
+git clone YOUR_REPOSITORY_URL
+cd ai110-module3show-musicrecommendersimulation-starter
+```
 
-2. Install dependencies
+2. Create a virtual environment (optional but recommended):
+
+```bash
+python -m venv .venv
+```
+
+Activate the virtual environment.
+
+Mac or Linux:
+
+```bash
+source .venv/bin/activate
+```
+
+Windows:
+
+```bash
+.venv\Scripts\activate
+```
+
+3. Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-3. Run the app:
+4. Run the application:
 
 ```bash
 python -m src.main
@@ -56,67 +115,78 @@ python -m src.main
 
 ### Running Tests
 
-Run the starter tests with:
+Run the tests using:
 
 ```bash
 pytest
 ```
 
-You can add more tests in `tests/test_recommender.py`.
+Additional tests can be added in `tests/test_recommender.py`.
 
 ---
 
 ## Sample Recommendation Output
 
-Paste a sample of your recommender's output here as a text block so a reader can see what it produces:
+The program will display the top recommended songs, their scores, and the reasons they were selected.
 
-```
-# e.g.:
-# User profile: genre=indie, mood=chill, energy=low
-# Recommendations:
-#   1. ...
-#   2. ...
-#   3. ...
-```
+**To be completed after running the program.**
 
-**Screenshot or video** *(optional)*: <!-- Insert a screenshot or demo video link here -->
+```text
+User Profile: To be determined
+
+Top 5 Recommendations:
+
+[Paste actual terminal output here]
+```
 
 ---
 
 ## Experiments You Tried
 
-Use this section to document the experiments you ran. For example:
+To evaluate the recommender, I will test it with different user preferences and compare how the recommendations change.
 
-- What happened when you changed the weight on genre from 2.0 to 0.5
-- What happened when you added tempo or valence to the score
-- How did your system behave for different types of users
+### Experiment 1: Different User Profiles
+
+The recommender will be tested using three profiles:
+
+1. High-Energy Pop: Pop music with a happy mood and high energy.
+2. Chill Lofi: Lofi music with a chill mood and low energy.
+3. Intense Rock: Rock music with an intense mood and high energy.
+
+I will compare the top five recommendations for each profile to see how the algorithm responds to different musical preferences.
+
+### Experiment 2: Changing Feature Weights
+
+I will test how changing the importance of genre and energy affects the recommendations.
+
+The original scoring system gives genre matches 2.0 points and energy similarity up to 1.0 point.
+
+For the experiment, I will reduce the genre weight to 1.0 and increase the energy similarity weight to 2.0.
+
+**Results:** To be completed after running the experiments.
 
 ---
 
 ## Limitations and Risks
 
-Summarize some limitations of your recommender.
+My music recommendation system has several limitations.
 
-Examples:
+- **Small Dataset:** The system only recommends songs included in its CSV file.
+- **Limited Features:** It mainly focuses on genre, mood, and energy instead of lyrics, listening history, or other musical characteristics.
+- **Filter Bubbles:** The algorithm may repeatedly recommend songs from the same genre instead of introducing users to different types of music.
+- **No User Feedback:** The system does not automatically learn from songs users like or skip.
+- **Scoring Bias:** Giving genre more points than mood or energy may cause the system to favor certain songs even when other songs match the user's overall vibe better.
 
-- It only works on a tiny catalog
-- It does not understand lyrics or language
-- It might over favor one genre or mood
-
-You will go deeper on this in your model card.
+These limitations show how even a simple recommendation algorithm can influence what music users discover.
 
 ---
 
 ## Reflection
 
-Read and complete `model_card.md`:
+This project is helping me understand how recommendation systems turn data into personalized suggestions. Before working on this project, I knew that platforms like Spotify recommended music based on listening habits, but I did not fully understand how individual song features could be used to calculate recommendations. Building a scoring system demonstrates how genre, mood, and energy can be combined to rank songs.
 
-[**Model Card**](model_card.md)
+I am also learning that the way an algorithm is designed can influence its results. For example, giving genre more importance than mood could cause the system to overlook songs that a user might actually enjoy. AI tools can help with designing the algorithm and debugging the code, but I still need to test the recommendations and verify that the results make sense.
 
-Write 1 to 2 paragraphs here about what you learned:
+I will update this reflection after completing the implementation and experiments.
 
-- about how recommenders turn data into predictions
-- about where bias or unfairness could show up in systems like this
-
-
-
+For more information about the system's evaluation and limitations, see the [Model Card](model_card.md).
