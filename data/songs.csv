@@ -1,4 +1,7 @@
 
+mkdir -p data src
+
+cat > data/songs.csv <<'CSV'
 id,title,artist,genre,mood,energy,tempo_bpm,valence,danceability,acousticness
 1,Sunrise City,Neon Echo,pop,happy,0.82,118,0.84,0.79,0.18
 2,Midnight Coding,LoRoom,lofi,chill,0.42,78,0.56,0.62,0.71
@@ -20,3 +23,9 @@ id,title,artist,genre,mood,energy,tempo_bpm,valence,danceability,acousticness
 18,Electric Nights,Future Pulse,edm,happy,0.88,128,0.92,0.93,0.06
 19,Quiet Moments,Acoustic Soul,folk,relaxed,0.25,68,0.64,0.40,0.95
 20,After Hours,Velvet Sound,r&b,moody,0.55,92,0.42,0.69,0.58
+CSV
+
+touch src/__init__.py
+
+python -m src.main
+python -m pytest
